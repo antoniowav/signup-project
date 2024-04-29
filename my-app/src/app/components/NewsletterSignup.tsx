@@ -2,16 +2,22 @@
 "use client";
 import React, { useState } from "react";
 
-type NewsletterSignUpProps = {
-  error?: string;
-  success?: string;
+type Signup = {
+  status?: string;
 };
 
 const NewsletterSignUp: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const setErrorWithTimeout = (errorMsg: string, timeout = 3000) => {
+    setError(errorMsg);
+    setTimeout(() => {
+      setError("");
+    }, timeout);
+  };
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -39,18 +45,15 @@ const NewsletterSignUp: React.FC = () => {
           body: JSON.stringify({ email }),
         }
       );
-      const data: NewsletterSignUpProps = await response.json();
-      console.log(data);
-      if (data?.success === "Success") {
+      const data: Signup = await response.json();
+      if (data.status === "Success!") {
         setSuccess(true);
         setError("");
       } else {
-        setSuccess(false);
-        setError("Failed to sign up.");
+        setErrorWithTimeout("Failed to sign up.");
       }
     } catch (e) {
-      setError("An error occurred while sending your request.");
-      setSuccess(false);
+      setErrorWithTimeout("An error occurred while sending your request.");
       console.error(e);
     } finally {
       setIsLoading(false);
@@ -83,47 +86,57 @@ const NewsletterSignUp: React.FC = () => {
       }`}
     >
       <h1 className="font-bold text-left">Sign up to our newsletter</h1>
-      <p className="text-base leading-5 text-left font-bold">
+      <p className="text-base leading-5 text-left font-bold mt-2">
         Lorem ipsum dolor sit amet, consecte adipiscing elit praesent sodales
         purus magna, eget lacinia sapien hendrerit.
       </p>
-      <form className="mt-4 relative" onSubmit={handleSubmit}>
-        <label
-          htmlFor="email"
-          className={`font-bold text-2xl absolute bottom-4 left-8 transition-opacity duration-300 ${
-            email ? "opacity-0" : "opacity-100"
-          }`}
-        >
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          className={`w-full p-2 mb-2 h-12 text-black rounded-full ${
-            error
-              ? "bg-errorPrimary text-errorSecondary border-errorSecondary"
-              : success
-              ? "bg-successPrimary text-successSecondary border-successSecondary"
-              : "bg-white border-black"
-          } border-4 outline-none appearance-none px-4 text-2xl font-bold`}
-          placeholder=""
-          value={email}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
+      {!success && (
+        <form className="mt-4 relative" onSubmit={handleSubmit}>
+          <label
+            htmlFor="email"
+            className={`font-bold text-2xl absolute bottom-4 left-8 transition-opacity duration-300 ${
+              email ? "opacity-0" : "opacity-100"
+            }`}
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className={`w-full p-2 mb-2 h-12 text-black rounded-full ${
+              error
+                ? "bg-errorPrimary text-errorSecondary border-errorSecondary"
+                : success
+                ? "bg-successPrimary text-successSecondary border-successSecondary"
+                : "bg-white border-black"
+            } border-4 outline-none appearance-none px-4 text-2xl font-bold`}
+            placeholder=""
+            value={email}
+            onChange={handleChange}
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            className={`absolute whitespace-nowrap right-2 top-2 px-4 h-[32px] rounded-full font-bold ${
+              error
+                ? "text-errorPrimary bg-errorSecondary"
+                : "text-white bg-black"
+            } focus:outline-none transition-colors`}
+            disabled={isLoading}
+          >
+            {getButtonText()}
+          </button>
+        </form>
+      )}
+      {success && (
         <button
-          type="submit"
-          className={`absolute whitespace-nowrap right-2 top-2 px-4 h-[32px] rounded-full font-bold ${
-            error
-              ? "text-errorPrimary bg-errorSecondary"
-              : "text-white bg-black"
-          }   focus:outline-none transition-colors`}
-          disabled={isLoading}
+          onClick={() => setSuccess(false)}
+          className="bg-successSecondary text-successPrimary mt-4 px-4 rounded-3xl h-12 font-bold w-full"
         >
-          {getButtonText()}
+          Thanks!
         </button>
-      </form>
+      )}
     </div>
   );
 };

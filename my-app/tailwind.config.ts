@@ -19,6 +19,9 @@ const config: Config = {
         errorSecondary: "#FF0000",
         successPrimary: "#004006",
         successSecondary: "#69ED76",
+      },
+      fontFamily: {
+        simmaBold: ["Simma-Lugnt-bold", "sans-serif"],
       }
     },
   },
