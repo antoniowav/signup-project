@@ -111,7 +111,7 @@ const NewsletterSignUp: React.FC = () => {
                 : success
                 ? "bg-successPrimary text-successSecondary border-successSecondary"
                 : "bg-white border-black"
-            } border-4 outline-none appearance-none px-4 text-2xl font-bold pr-24 transition-colors`}
+            } border-4 outline-none appearance-none px-4 text-2xl font-bold pr-28 transition-colors`}
             placeholder=""
             value={email}
             onChange={handleChange}
