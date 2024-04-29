@@ -75,7 +75,7 @@ const NewsletterSignUp: React.FC = () => {
 
   return (
     <div
-      className={`px-[24px] py-[72px] mx-auto absolute bottom-8 rounded-[40px] w-[342px] ${
+      className={`min-h-[384px] transition-all px-[24px] py-[72px] mx-auto absolute bottom-8 rounded-[40px] w-[342px] ${
         isLoading
           ? "bg-white"
           : error
@@ -111,7 +111,7 @@ const NewsletterSignUp: React.FC = () => {
                 : success
                 ? "bg-successPrimary text-successSecondary border-successSecondary"
                 : "bg-white border-black"
-            } border-4 outline-none appearance-none px-4 text-2xl font-bold pr-24`}
+            } border-4 outline-none appearance-none px-4 text-2xl font-bold pr-24 transition-colors`}
             placeholder=""
             value={email}
             onChange={handleChange}
@@ -134,7 +134,7 @@ const NewsletterSignUp: React.FC = () => {
       {success && (
         <button
           onClick={() => setSuccess(false)}
-          className="bg-successSecondary text-successPrimary mt-4 px-4 rounded-3xl h-12 font-bold w-full"
+          className="transition-colors bg-successSecondary text-successPrimary mt-4 px-4 rounded-3xl h-12 font-bold w-full"
         >
           Thanks!
         </button>
